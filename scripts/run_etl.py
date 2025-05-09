@@ -1,10 +1,13 @@
 import os
 import sys
 from config.env_config import setup_env
+from etl.extract.extract import extract_data
 
 
 def main():
     run_env_setup()
+
+    extracted_data = extract_data()
 
     print(
         f"ETL pipeline run successfully in "
