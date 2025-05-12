@@ -1,8 +1,7 @@
-import re
-import numpy as np
 import pandas as pd
 from etl.transform.helper.clean import clean_data
 from etl.transform.helper.convert import convert_data
+from etl.transform.helper.threshold import check_threshold
 
 
 def transform_data(df) -> pd.DataFrame:
@@ -47,29 +46,6 @@ def handle_null_values(df) -> pd.DataFrame:
 
     df = df.dropna(
         subset=['Credit_Mix', 'Payment_Behaviour', 'Name', 'Monthly_Balance'])
-
-    return df
-
-
-def check_threshold(df) -> pd.DataFrame:
-    df = df[df['Age'].apply(check_threshold_age)]
-    df = drop_rows_with_negative_value(df)
-    return df
-
-
-def check_threshold_age(val):
-    return 10 < val < 100
-
-
-def drop_rows_with_negative_value(df):
-    numerical_columns = ["Annual_Income", "Monthly_Inhand_Salary", "Outstanding_Debt",
-                         "Credit_Utilization_Ratio", "Total_EMI_per_month",
-                         "Amount_invested_monthly", "Monthly_Balance"]
-
-    for col in numerical_columns:
-        df[col] = pd.to_numeric(df[col], errors='coerce')
-
-        df.loc[df[col] < 0, col] = 0
 
     return df
 
