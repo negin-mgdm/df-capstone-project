@@ -6,6 +6,7 @@ def transform_data(df) -> pd.DataFrame:
     df_transformed = drop_unwanted_columns(df)
     df_transformed = clean_data(df_transformed)
     df_transformed = convert_data(df_transformed)
+    df_transformed = check_threshold(df_transformed)
     return df_transformed
 
 
@@ -92,6 +93,26 @@ def clean_payment_behaviour(val):
     if isinstance(val, str) and re.match(pattern, val.strip()):
         return val.strip()
     return "N/A"
+
+
+def check_threshold(df) -> pd.DataFrame:
+    df = df[df['Age'].apply(check_threshold_age)]
+    df = delete_non_negative_rows(df)
+    return df
+
+
+def check_threshold_age(val):
+    return 10 < val < 100
+
+
+def delete_non_negative_rows(df):
+    numerical_columns = ["Annual_Income", "Monthly_Inhand_Salary", "Outstanding_Debt",
+                         "Credit_Utilization_Ratio", "Total_EMI_per_month", "Amount_invested_monthly", "Monthly_Balance"]
+    for col in numerical_columns:
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+        df = df[df[col] >= 0]
+
+    return df
 
 
 def drop_unwanted_columns(df) -> pd.DataFrame:
