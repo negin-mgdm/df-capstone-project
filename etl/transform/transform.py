@@ -1,4 +1,5 @@
 import re
+import numpy as np
 import pandas as pd
 
 
@@ -46,19 +47,19 @@ def convert_credit_history_age(val):
             years = int(match.group(1))
             months = int(match.group(2))
             return years * 12 + months
-    return "N/A"
+    return np.nan
 
 
 def clean_special_chars_string(val):
     if isinstance(val, str) and all(char.isalpha() or char.isspace() for char in val):
         return val
     else:
-        return "N/A"
+        return np.nan
 
 
 def clean_special_chars_number(val):
     if pd.isnull(val) or (isinstance(val, str) and val.strip() == ''):
-        return "N/A"
+        return np.nan
 
     if isinstance(val, (int, float)):
         return round(float(val), 2)
@@ -68,7 +69,7 @@ def clean_special_chars_number(val):
         if match:
             return round(float(match.group()), 2)
 
-    return "N/A"
+    return np.nan
 
 
 def clean_credit_history_age_amount(val):
@@ -76,23 +77,23 @@ def clean_credit_history_age_amount(val):
     if isinstance(val, str) and re.match(pattern, val.strip()):
         return val
     else:
-        return "N/A"
+        return np.nan
 
 
 def clean_payment_of_min_amount(val):
     if isinstance(val, str) and val.strip().upper() == 'NM':
-        return "N/A"
+        return np.nan
     elif isinstance(val, str) and any(char.isalpha() for char in val):
         return val.strip()
     else:
-        return "N/A"
+        return np.nan
 
 
 def clean_payment_behaviour(val):
     pattern = r"^(High|Low)_spent_(Small|Medium|Large)_value_payments$"
     if isinstance(val, str) and re.match(pattern, val.strip()):
         return val.strip()
-    return "N/A"
+    return np.nan
 
 
 def check_threshold(df) -> pd.DataFrame:
