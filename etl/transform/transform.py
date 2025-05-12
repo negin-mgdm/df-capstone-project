@@ -55,7 +55,6 @@ def convert_credit_history_age(val):
 def handle_null_values(df) -> pd.DataFrame:
     df['Name'] = df.groupby('Customer_ID')['Name'].transform(
         lambda x: x.ffill().bfill())
-    df = df[pd.notnull(df['Name'])]
 
     avg_salary_to_income_ratio = (df['Monthly_Inhand_Salary'] / df['Annual_Income'])[
         df['Monthly_Inhand_Salary'].notnull()].mean()
@@ -67,15 +66,8 @@ def handle_null_values(df) -> pd.DataFrame:
 
     df['Amount_invested_monthly'].fillna(0, inplace=True)
 
-    df['Estimated_Monthly_Balance'] = (
-        df['Monthly_Inhand_Salary']
-        - df['Total_EMI_per_month']
-        - df['Amount_invested_monthly']
-    )
-
-    df['Monthly_Balance'] = df['Monthly_Balance'].fillna(
-        df['Estimated_Monthly_Balance'])
-    df.drop(columns='Estimated_Monthly_Balance', inplace=True)
+    df['Monthly_Balance'] = df.groupby(
+        'Customer_ID')['Monthly_Balance'].transform(lambda x: x.ffill().bfill())
 
     df['Occupation'] = df.groupby('Customer_ID')['Occupation'].transform(
         lambda x: x.ffill().bfill()
@@ -87,6 +79,11 @@ def handle_null_values(df) -> pd.DataFrame:
 
     df['Payment_Behaviour'] = df.groupby(
         'Customer_ID')['Payment_Behaviour'].transform(lambda x: x.ffill().bfill())
+
+    df['Payment_of_Min_Amount'] = df['Payment_of_Min_Amount'].fillna('N/A')
+
+    df = df.dropna(
+        subset=['Credit_Mix', 'Payment_Behaviour', 'Name', 'Monthly_Balance'])
 
     return df
 
