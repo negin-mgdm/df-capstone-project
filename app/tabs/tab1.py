@@ -16,6 +16,12 @@ def tab_1(df):
 
     latest = customer_data.sort_values('Month').iloc[-1]
 
+    draw_customer_overview_metrics(latest)
+    draw_balance_and_investment_graph(customer_data)
+    draw_emi_investment_balance_graph(latest)
+
+
+def draw_customer_overview_metrics(latest):
     income = latest['Monthly_Inhand_Salary']
     debt = latest['Outstanding_Debt']
     ratio = income / debt if debt != 0 else float('inf')
@@ -52,6 +58,8 @@ def tab_1(df):
     with col4:
         st.metric(label="Credit Score", value=latest['Credit_Score'])
 
+
+def draw_balance_and_investment_graph(customer_data):
     st.subheader("Balance & Investment Over Time")
     combined_data = customer_data.set_index(
         'Month')[['Monthly_Balance', 'Amount_invested_monthly']].copy()
@@ -72,6 +80,8 @@ def tab_1(df):
 
     st.plotly_chart(fig, use_container_width=True)
 
+
+def draw_emi_investment_balance_graph(latest):
     st.subheader("EMI vs Investment vs Balance")
     bar_data = pd.DataFrame({
         'Category': ['Total EMI', 'Monthly Investment', 'Monthly Balance'],
