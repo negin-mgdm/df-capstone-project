@@ -2,8 +2,8 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 from streamlit_option_menu import option_menu
-import plotly.express as px
 
+from tabs.tab3 import tab_3
 from tabs.tab2 import setup_filter, tab_2
 from tabs.tab1 import tab_1
 
@@ -13,7 +13,8 @@ def setup_tab_bar():
         menu_title="Dashboard",
         options=[
             "Customer Financial Health",
-            "Segment Analysis & Trends"
+            "Segment Analysis & Trends",
+            "Risk & Behaviour Insights"
         ],
         icons=["activity", "bar-chart-line", "exclamation-triangle"],
         menu_icon="cast",
@@ -52,6 +53,10 @@ def main():
         selected_credit_score, selected_age, selected_history = setup_filter(
             df)
         tab_2(df, selected_credit_score, selected_age, selected_history)
+
+    # --- TAB 3 ---
+    elif tab_choice == "Risk & Behaviour Insights":
+        tab_3(df)
 
 
 main()
