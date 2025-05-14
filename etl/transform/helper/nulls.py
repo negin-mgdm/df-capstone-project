@@ -13,7 +13,8 @@ def handle_null_values(df) -> pd.DataFrame:
     df['Credit_History_Age'].fillna(
         df['Credit_History_Age'].median(), inplace=True)
 
-    df['Amount_invested_monthly'].fillna(0, inplace=True)
+    df['Amount_invested_monthly'] = df.groupby(
+        'Customer_ID')['Amount_invested_monthly'].transform(lambda x: x.ffill().bfill())
 
     df['Monthly_Balance'] = df.groupby(
         'Customer_ID')['Monthly_Balance'].transform(lambda x: x.ffill().bfill())
@@ -25,6 +26,9 @@ def handle_null_values(df) -> pd.DataFrame:
 
     df['Credit_Mix'] = df.groupby('Customer_ID')[
         'Credit_Mix'].transform(lambda x: x.ffill().bfill())
+
+    df['Credit_Score'] = df.groupby('Customer_ID')[
+        'Credit_Score'].transform(lambda x: x.ffill().bfill())
 
     df['Payment_Behaviour'] = df.groupby(
         'Customer_ID')['Payment_Behaviour'].transform(lambda x: x.ffill().bfill())

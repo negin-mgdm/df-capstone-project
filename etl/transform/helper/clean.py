@@ -5,7 +5,7 @@ import pandas as pd
 
 def clean_data(df) -> pd.DataFrame:
     string_columns = ["Month", "Name", "Occupation",
-                      "Credit_Mix"]
+                      "Credit_Mix", "Credit_Score"]
     for col in string_columns:
         df[col] = df[col].apply(clean_special_chars_string)
 
