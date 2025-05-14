@@ -4,6 +4,7 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 import plotly.express as px
 
+from tabs.tab2 import setup_filter, tab_2
 from tabs.tab1 import tab_1
 
 
@@ -11,7 +12,8 @@ def setup_tab_bar():
     tab_choice = option_menu(
         menu_title="Dashboard",
         options=[
-            "Customer Financial Health"
+            "Customer Financial Health",
+            "Segment Analysis & Trends"
         ],
         icons=["activity", "bar-chart-line", "exclamation-triangle"],
         menu_icon="cast",
@@ -44,6 +46,12 @@ def main():
     # --- TAB 1 ---
     if tab_choice == "Customer Financial Health":
         tab_1(df)
+
+    # --- TAB 2 ---
+    elif tab_choice == "Segment Analysis & Trends":
+        selected_credit_score, selected_age, selected_history = setup_filter(
+            df)
+        tab_2(df, selected_credit_score, selected_age, selected_history)
 
 
 main()
