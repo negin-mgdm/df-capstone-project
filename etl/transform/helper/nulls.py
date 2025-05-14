@@ -26,6 +26,9 @@ def handle_null_values(df) -> pd.DataFrame:
     df['Credit_Mix'] = df.groupby('Customer_ID')[
         'Credit_Mix'].transform(lambda x: x.ffill().bfill())
 
+    df['Credit_Score'] = df.groupby('Customer_ID')[
+        'Credit_Score'].transform(lambda x: x.ffill().bfill())
+
     df['Payment_Behaviour'] = df.groupby(
         'Customer_ID')['Payment_Behaviour'].transform(lambda x: x.ffill().bfill())
 
