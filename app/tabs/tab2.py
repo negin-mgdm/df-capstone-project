@@ -26,6 +26,12 @@ def tab_2(df, selected_credit_score, selected_age, selected_history):
         (df['Credit_History_Age'].between(*selected_history))
     ]
 
+    draw_creditscore_occupation_graph(filtered_df)
+    draw_avg_monthly_balance_occupation_graph(filtered_df)
+    draw_total_emi_per_month_graph(filtered_df)
+
+
+def draw_creditscore_occupation_graph(filtered_df):
     st.subheader("Credit Score Distribution by Occupation")
 
     credit_score_dist = (
@@ -52,6 +58,8 @@ def tab_2(df, selected_credit_score, selected_age, selected_history):
 
     st.plotly_chart(fig_mix, use_container_width=True)
 
+
+def draw_avg_monthly_balance_occupation_graph(filtered_df):
     st.subheader("Average Monthly Balance per Occupation")
 
     avg_balance = (
@@ -70,6 +78,8 @@ def tab_2(df, selected_credit_score, selected_age, selected_history):
     )
     st.plotly_chart(fig_balance, use_container_width=True)
 
+
+def draw_total_emi_per_month_graph(filtered_df):
     st.subheader("Total EMI per Month by Age Group")
     age_bins = pd.cut(filtered_df['Age'], bins=[
                       18, 25, 35, 45, 55, 65, 100], right=False)
