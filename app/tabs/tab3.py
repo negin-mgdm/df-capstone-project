@@ -6,6 +6,12 @@ import plotly.express as px
 def tab_3(df):
     st.header("Risk & Behavior Insights")
 
+    top_risk1 = draw_high_debt_low_salary_graph(df)
+    top_low_spend = draw_missed_payments_low_spending_graph(df)
+    draw_risk_summary_chart(top_risk1, top_low_spend)
+
+
+def draw_high_debt_low_salary_graph(df):
     st.subheader("Customers with High Debt and Low Salary")
     risk1 = df[df['Outstanding_Debt'] > 2 * df['Monthly_Inhand_Salary']]
     grouped_risk1 = risk1.groupby(['Customer_ID', 'Name']).agg({
@@ -15,7 +21,10 @@ def tab_3(df):
     top_risk1 = grouped_risk1.sort_values(
         by='Outstanding_Debt', ascending=False)
     st.dataframe(top_risk1)
+    return top_risk1
 
+
+def draw_missed_payments_low_spending_graph(df):
     st.subheader("Customers with Missed Payments and Low Spending")
     low_spend = df[
         (df['Payment_of_Min_Amount'] == 'No') &
@@ -28,7 +37,10 @@ def tab_3(df):
     top_low_spend = grouped_low_spend.sort_values(
         by='Outstanding_Debt', ascending=False)
     st.dataframe(top_low_spend)
+    return top_low_spend
 
+
+def draw_risk_summary_chart(top_risk1, top_low_spend):
     high_debt_ids = set(top_risk1['Customer_ID'])
     low_spend_ids = set(top_low_spend['Customer_ID'])
 
