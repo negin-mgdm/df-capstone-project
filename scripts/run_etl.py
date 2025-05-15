@@ -7,7 +7,8 @@ from etl.transform.transform import transform_data
 
 
 def main():
-    run_env_setup()
+    if len(sys.argv) > 1:
+        run_env_setup()
 
     extracted_data = extract_data()
     transformed_data = transform_data(extracted_data)
