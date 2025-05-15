@@ -1,5 +1,14 @@
+import logging
 import pandas as pd
 import sys
+
+from utils.logging_utils import setup_logger
+
+logger = setup_logger(
+    __name__,
+    'run.log',
+    level=logging.DEBUG
+)
 
 
 def extract_data() -> pd.DataFrame:
@@ -23,5 +32,7 @@ def extract_data() -> pd.DataFrame:
 
 def terminate(message):
     print(message)
+    logger.setLevel(logging.ERROR)
+    logger.error(f"Failed to extract data: {message}")
     print("Exiting the extract step.")
     sys.exit()
